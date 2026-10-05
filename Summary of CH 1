@@ -1,0 +1,175 @@
+Summary: Neural Networks and Learning
+
+The article introduces the fundamentals of artificial neural networks through the problem of recognizing handwritten digits. It explains why visual recognition is difficult for computers, how neural networks model decision-making, and how they learn using gradient descent and stochastic gradient descent.
+
+1. Handwriting Recognition as a Learning Problem
+Humans recognize handwritten digits effortlessly, but this ability depends on extremely complex visual-processing systems.
+Writing explicit rules for a computer to recognize every possible variation of a digit quickly becomes impractical because of the many exceptions and variations.
+Neural networks take a different approach: instead of programming recognition rules directly, they learn rules from many labeled examples.
+The chapter uses handwritten-digit recognition as a prototype because it is challenging enough to demonstrate neural-network concepts while remaining computationally manageable.
+The discussion introduces several foundational concepts:
+Perceptrons
+Sigmoid neurons
+Neural-network architecture
+Gradient descent
+Stochastic gradient descent
+Deep learning
+2. Perceptrons
+
+A perceptron is a simple artificial neuron that makes a binary decision.
+
+It receives binary inputs \(x_1, x_2, \ldots\).
+Each input has a weight representing its importance.
+The neuron adds the weighted inputs and compares the result with a threshold.
+Its output is either 0 or 1.
+
+The threshold can be replaced by a bias, giving the simpler rule:
+
+$$ \text{output} = \begin{cases} 0 & \text{if } w\cdot x+b\leq0\\ 1 & \text{if } w\cdot x+b>0 \end{cases} $$
+
+The bias can be understood as determining how easily the neuron "fires."
+
+Perceptrons as decision-makers
+
+The article illustrates perceptrons with a cheese-festival example. Different weights can make some pieces of evidence more important than others—for example, weather could matter much more than transportation.
+
+Networks of perceptrons can then combine simple decisions into increasingly complex decisions across multiple layers.
+
+Perceptrons and logic
+
+Perceptrons can also implement logical functions such as AND, OR, and NAND.
+
+Because NAND is universal for computation, networks of perceptrons can theoretically implement any logical computation. However, their more important advantage is that their weights and biases can be learned automatically, rather than having every logical connection explicitly programmed.
+
+3. Sigmoid Neurons
+
+A major problem with perceptrons is that their outputs abruptly switch between 0 and 1. A tiny change in a weight can therefore cause a large change in the network's behavior.
+
+Sigmoid neurons solve this problem by producing smooth outputs between 0 and 1:
+
+$$ \sigma(z)=\frac{1}{1+e^{-z}} $$
+
+where:
+
+$$ z=w\cdot x+b $$
+
+Unlike perceptrons, small changes in weights or biases generally produce small changes in the output. This smoothness makes it possible to gradually adjust a network toward better behavior.
+
+Why smoothness matters
+
+The key advantage of the sigmoid function is not its exact mathematical form but its smooth shape.
+
+Because the output changes smoothly, calculus can determine how changes to individual weights and biases affect the network's output. This provides the foundation for learning algorithms.
+
+4. Neural-Network Architecture
+
+A neural network is organized into layers:
+
+Input layer: receives the raw data.
+Hidden layer(s): transforms the input into increasingly useful representations.
+Output layer: produces the final result.
+
+A network with information moving only from input toward output is called a feedforward neural network. The article also briefly contrasts these with recurrent neural networks, which can contain feedback loops.
+
+Example: recognizing digits
+
+For a 28×28 grayscale image:
+
+The input layer has 784 neurons—one for each pixel.
+A hidden layer contains some chosen number of neurons.
+The output layer has 10 neurons, corresponding to digits 0 through 9.
+The neuron with the highest activation represents the network's predicted digit.
+
+The hidden neurons can potentially learn to detect meaningful components or shapes. Multiple detected features can then provide evidence for a particular digit.
+
+5. The MNIST Dataset
+
+The article uses the MNIST handwritten-digit dataset to train and test the network.
+
+60,000 images are used for training.
+10,000 separate images are used for testing.
+Each image is 28×28 grayscale pixels.
+The test images come from people different from those represented in the training set, helping test whether the network generalizes beyond the handwriting it has already seen.
+
+The goal is to find weights and biases that make the network's outputs match the correct digit labels.
+
+6. Cost Function
+
+To measure how well the network is performing, the article introduces a quadratic cost function (also called mean squared error):
+
+$$ C(w,b)=\frac{1}{2n}\sum_x\|y(x)-a\|^2 $$
+
+where:
+
+\(w\) = all network weights
+\(b\) = all network biases
+\(y(x)\) = desired output
+\(a\) = actual network output
+\(n\) = number of training examples
+
+The objective is to adjust the weights and biases so that the cost becomes as small as possible.
+
+A smooth cost function is useful because classification accuracy itself changes discontinuously: small parameter changes often have no effect on the number of correctly classified images. A smooth cost provides a much better signal for determining how to improve the network.
+
+7. Gradient Descent
+
+Gradient descent is the central method introduced for minimizing the cost function.
+
+The article imagines the cost function as a valley:
+
+Start at some point on the surface.
+Calculate the gradient, which indicates the direction of greatest increase.
+Move in the opposite direction.
+Repeat until reaching a low point.
+
+The basic update rule is:
+
+$$ v' = v-\eta\nabla C $$
+
+where:
+
+\(\nabla C\) is the gradient of the cost function.
+\(\eta\) is the learning rate.
+The negative sign means movement is opposite the direction of increasing cost.
+Learning rate
+
+The learning rate must be chosen carefully:
+
+Too large: steps may overshoot and increase the cost.
+Too small: learning becomes unnecessarily slow.
+
+Gradient descent works in the same basic way whether the cost function has two variables or millions of variables.
+
+8. Applying Gradient Descent to Neural Networks
+
+For a neural network, gradient descent updates each parameter according to its partial derivative:
+
+$$ w_k' = w_k-\eta\frac{\partial C}{\partial w_k} $$ $$ b_l' = b_l-\eta\frac{\partial C}{\partial b_l} $$
+
+Repeatedly applying these updates gradually changes the network's weights and biases in an effort to reduce its cost.
+
+9. Stochastic Gradient Descent
+
+Computing the gradient using every training example can be extremely slow, especially for large datasets.
+
+Stochastic gradient descent (SGD) speeds this up by:
+
+Randomly selecting a small group of training examples called a mini-batch.
+Computing the gradient using only that mini-batch.
+Updating the weights and biases.
+Repeating with another mini-batch.
+
+Because a sufficiently large random sample tends to approximate the full dataset, the mini-batch gradient can provide a useful approximation much faster than processing the entire dataset.
+
+One complete pass through the training data is called an epoch.
+
+Key Takeaways
+Neural networks learn patterns from examples rather than relying on manually programmed rules.
+Perceptrons provide a simple model of binary decision-making.
+Sigmoid neurons introduce smooth outputs, making gradual learning possible.
+Hidden layers allow networks to build increasingly complex representations from simpler features.
+MNIST provides a practical dataset for demonstrating handwritten-digit recognition.
+A cost function measures how far the network's output is from the desired output.
+Gradient descent minimizes that cost by repeatedly moving parameters in the direction that reduces it.
+Stochastic gradient descent makes learning practical by estimating the gradient from small random mini-batches.
+These ideas form the foundation for understanding deep learning and more advanced neural-network methods.
